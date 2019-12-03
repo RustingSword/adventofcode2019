@@ -1,0 +1,3 @@
+这次 awk 搞不定了……
+
+我以为这个已经够暴力了，结果去 [reddit](https://www.reddit.com/r/adventofcode/comments/e5bz2w/2019_day_3_solutions/) 一看，排名靠前的解法比我还暴力 orz
