@@ -12,7 +12,7 @@ def is_valid_password(number):
     number = str(number)
     if rule_of_double_part1(number):
     # if rule_of_double_part2(number):
-        # if ''.join(map(str, sorted(map(int, [x for x in number])))) == number:
+        # if list(number) == sorted(number):
         # if all(int(x) <= int(y) for x, y in zip(number, number[1:])):
         if all(x <= y for x, y in zip(number, number[1:])):  # even faster without `int`
             return True
