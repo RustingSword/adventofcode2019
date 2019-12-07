@@ -52,7 +52,6 @@ def run_prog(amplifier_id, phase, input_signal):
         elif op == 2:
             program[outpos] = first * second
         elif op == 3:
-            program[first] = input_signal
             if not memory.inited:
                 program[first] = phase
                 memory.inited = True
