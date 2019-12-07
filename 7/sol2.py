@@ -7,10 +7,7 @@ prog = list(map(int, open(sys.argv[1]).read().strip("\n").split(",")))
 
 class Memory:
     def __init__(self):
-        self.program = prog.copy()
-        self.inited = False
-        self.pc = 0
-        self.output = 0
+        self.reset()
 
     def reset(self):
         self.program = prog.copy()
@@ -93,7 +90,6 @@ def find_max_thrust():
         while not should_stop:
             for amplifier_id, phase in enumerate(phase_order):
                 input_signal, should_stop = run_prog(amplifier_id, phase, input_signal)
-        # print(phase_order, memories[4].output)
         if memories[4].output > max_thrust:
             max_thrust = memories[4].output
             best_phase_order = phase_order
