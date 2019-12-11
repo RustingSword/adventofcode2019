@@ -1,12 +1,10 @@
 #!/usr/bin/env python3
 
 import sys
-from math import gcd
-from math import atan2
-from math import pi
-from collections import namedtuple
-from collections import defaultdict
-from collections import deque
+from collections import defaultdict, deque, namedtuple
+from math import atan2, gcd, pi
+
+import numpy as np
 
 Coordinate = namedtuple("Coordinate", "x y")
 
@@ -25,10 +23,8 @@ for asteroid in asteroids:
         if asteroid == target:
             continue
         x_diff, y_diff = asteroid.x - target.x, target.y - asteroid.y  # XXX
-        if x_diff == 0:
-            diff = (0, 1 if y_diff > 0 else -1)
-        elif y_diff == 0:
-            diff = (1 if x_diff > 0 else -1, 0)
+        if x_diff * y_diff == 0:
+            diff = (np.sign(x_diff), np.sign(y_diff))
         else:
             divisor = gcd(x_diff, y_diff)
             diff = (x_diff // divisor, y_diff // divisor)
@@ -41,27 +37,12 @@ print(len(los))  # part 1
 
 ########################################
 
-laser = best
+sorted_angles = sorted(los, key=lambda x: (atan2(x[0], x[1]) + pi) % (pi * 2))
 
-# sort by angle
-def _calc_angle(diff):
-    radian = atan2(diff[0], diff[1])  # clockwise
-    return (radian + pi) % (pi * 2)  # 0 - 2*pi
-
-
-sorted_angles = sorted(los.keys(), key=lambda x: _calc_angle(x))
-
-asteroids_in_line = []
-
-
-def _dist_to_laser(p):
-    x_diff = p.x - laser.x
-    y_diff = p.y - laser.y
-    return x_diff * x_diff + y_diff * y_diff
-
-
-for angle in sorted_angles:
-    asteroids_in_line.append(deque(sorted(los[angle], key=lambda x: _dist_to_laser(x))))
+asteroids_in_line = [
+    deque(sorted(los[angle], key=lambda x: (x.x - best.x) ** 2 + (x.y - best.y) ** 2))
+    for angle in sorted_angles
+]
 
 seq = 0
 while True:
@@ -71,6 +52,6 @@ while True:
             seq += 1
             asteroid = line.popleft()
             if seq == 200:
-                print(asteroid)
+                print(asteroid)  # part 2
     if seq == old_seq:
         break
